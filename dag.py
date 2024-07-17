@@ -41,5 +41,18 @@ with DAG(
         write_disposition='WRITE_TRUNCATE',
     )
 
+    def process_file(**kwargs):
+    file_path = kwargs['ti'].xcom_pull(task_ids='pull_file_from_gcs')['output_path']
+    
+    data_to_load = []
+    with open(file_path, 'r') as file:
+        reader = csv.reader(file)
+        next(reader)  # Skip header row
+        for row in reader:
+            username, firstname, lastname, displayname, jobtitle, department = row
+            data_to_load.append((username, firstname, lastname, displayname, jobtitle, department))
+    
+    return data_to_load
+
     load_gcs_to_cloudsql
 
