@@ -66,8 +66,25 @@ download_from_gcs >> upload_to_spanner
 
 
 
-upload_to_spanner = PythonOperator(
+with DAG(
+    "target_dag",
+    default_args=default_args,
+    description='A DAG to transfer data from GCS to Spanner triggered by Pub/Sub',
+    schedule_interval=None,
+    start_date=datetime(2023, 1, 1),
+    catchup=False,
+) as target_dag:
+    download_from_gcs = GCSToLocalFilesystemOperator(
+        task_id='download_from_gcs',
+        bucket='your-gcs-bucket',
+        object_name='path/to/your/file.csv',
+        filename='/tmp/file.csv',
+    )
+
+    upload_to_spanner = PythonOperator(
         task_id='upload_to_spanner',
         python_callable=process_and_upload_to_spanner,
         provide_context=True,
     )
+
+    download_from_gcs >> upload_to_spanner
