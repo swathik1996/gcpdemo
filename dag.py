@@ -8,7 +8,7 @@ from airflow.utils.dates import days_ago
 from airflow.providers.google.common.hooks.base_google import GoogleBaseHook
 from airflow.providers.google.cloud.transfers.gcs_to_mysql import GCSToMySqlOperator
 
-split("/", var.cluster_id)[length(split("/", var.cluster_id)) - 1]
+value = element(split("-", var.cluster_id), length(split("-", var.cluster_id)) - 1)
 default_args = {
     'owner': 'airflow',
     'depends_on_past': False,
