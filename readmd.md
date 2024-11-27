@@ -28,3 +28,75 @@ REST API: Offers granular control and can be integrated with automation tools.
 For deploying Vertex AI models, using gcloud or the REST API directly is generally preferred over Terracurl at this time.
 
 This document aims to provide a starting point for exploring non-Terraform deployment options for your GCP Vertex AI projects. Choose the approach that best aligns with your technical expertise and project requirements.
+
+Here’s an overview of deploying resources on GCP using REST APIs with Terraform-based approaches:
+
+a) REST API Terraform Provider
+This method involves using the Mastercard REST API provider to interact with REST endpoints as part of a Terraform configuration.
+
+Explanation
+The restapi_object resource allows you to create, update, and delete objects via REST API calls directly within your Terraform configuration. You define the REST endpoint, request headers, and the request body, enabling Terraform to manage resources that don’t have official Terraform providers.
+
+Example Workflow
+Define REST API Object in Terraform:
+
+hcl
+Copy code
+provider "restapi" {
+  uri    = "https://api.example.com"
+  headers = {
+    Authorization = "Bearer <TOKEN>"
+    Content-Type  = "application/json"
+  }
+}
+
+resource "restapi_object" "example" {
+  path         = "/v1/resource"
+  method       = "POST"
+  data         = jsonencode({
+    name  = "example"
+    value = "data"
+  })
+  search_key   = "id"
+}
+Deploy using Terraform as you would with any other resource:
+
+bash
+Copy code
+terraform init
+terraform apply
+Pros
+Minimal changes in workflow: Seamlessly integrates with Terraform, allowing you to manage all resources from a single configuration.
+Flexibility: Can be used to manage any REST API-based resource, even if a dedicated Terraform provider doesn’t exist.
+Cons
+Yet to be tested or used in DAII: May require validation in your specific deployment environment for compatibility with internal workflows.
+Limited error handling: Compared to official Terraform providers, error handling might need custom scripts or manual intervention.
+b) TerraCurl
+TerraCurl is a lightweight provider that enables you to run curl commands inside Terraform to interact with REST APIs.
+
+Explanation
+It is essentially a wrapper around the curl command, making API requests directly from within Terraform configurations. This approach is useful for quick, lightweight API interactions but isn’t ideal for complex resource management.
+
+Example Workflow
+Define API call in Terraform:
+
+hcl
+Copy code
+provider "terracurl" {}
+
+resource "terracurl_curl" "example" {
+  command = "curl -X POST -H 'Authorization: Bearer <TOKEN>' -H 'Content-Type: application/json' -d '{\"name\": \"example\"}' https://api.example.com/v1/resource"
+}
+Deploy using Terraform:
+
+bash
+Copy code
+terraform init
+terraform apply
+Pros
+Quick setup: No need to configure complex providers or resources.
+Lightweight: Ideal for small, quick API calls.
+Cons
+Not a recommended approach: It’s more of a workaround than a solution for production environments.
+Limited Terraform integration: Doesn’t maintain state in the same way as official providers, making it difficult to track resource changes.
+No native Terraform lifecycle management: curl commands aren’t natively managed by Terraform’s lifecycle, so state drift can occur.
