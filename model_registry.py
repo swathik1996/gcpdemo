@@ -54,18 +54,31 @@ def import_model_version(
     # Initialize Vertex AI SDK
     aiplatform.init(project=project, location=location)
 
-    # Get the existing model
-    model = aiplatform.Model(model_name=f"projects/{project}/locations/{location}/models/{model_id}")
+    # Construct the parent resource name
+    parent = f"projects/{project}/locations/{location}/models/{model_id}"
 
-    # Import the new version
-    response = model.upload_version(
-        serving_container_image_uri=container_image_uri,
-        artifact_uri=artifact_uri,
-        encryption_spec_key_name=kms_key_name,
+    # Import the new version using ModelServiceClient
+    from google.cloud.aiplatform_v1 import ModelServiceClient
+    from google.cloud.aiplatform_v1.types import ImportModelRequest
+
+    client = ModelServiceClient()
+
+    request = ImportModelRequest(
+        parent=parent,
+        model={
+            "artifact_uri": artifact_uri,
+            "encryption_spec": {"kms_key_name": kms_key_name},
+            "container_spec": {
+                "image_uri": container_image_uri,
+            },
+        },
     )
 
+    response = client.import_model(request=request)
+
     print("New version imported successfully.")
-    print(f"Model version resource name: {response.resource_name}")
+    print(f"Model version resource name: {response.name}")
+
 
 if __name__ == "__main__":
     # User-defined variables
@@ -84,3 +97,4 @@ if __name__ == "__main__":
         container_image_uri=CONTAINER_IMAGE_URI,
         artifact_uri=ARTIFACT_URI,
     )
+
