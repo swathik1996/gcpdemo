@@ -28,3 +28,59 @@ if __name__ == "__main__":
     save_model()
 
 gsutil cp -r ./tpu_dummy_model gs://your-bucket-name/path-to-tpu-dummy-model/
+
+
+from google.cloud import aiplatform
+
+def import_model_version(
+    model_id: str,
+    project: str,
+    location: str,
+    kms_key_name: str,
+    container_image_uri: str,
+    artifact_uri: str,
+):
+    """
+    Imports a new version of a model to Vertex AI Model Registry.
+
+    Args:
+        model_id: The ID of the existing model.
+        project: Google Cloud project ID.
+        location: Location where the model is stored (e.g., "us-central1").
+        kms_key_name: The KMS key to encrypt the model.
+        container_image_uri: The container image URI for serving the model.
+        artifact_uri: The GCS path to the model artifacts.
+    """
+    # Initialize Vertex AI SDK
+    aiplatform.init(project=project, location=location)
+
+    # Get the existing model
+    model = aiplatform.Model(model_name=f"projects/{project}/locations/{location}/models/{model_id}")
+
+    # Import the new version
+    response = model.upload_version(
+        serving_container_image_uri=container_image_uri,
+        artifact_uri=artifact_uri,
+        encryption_spec_key_name=kms_key_name,
+    )
+
+    print("New version imported successfully.")
+    print(f"Model version resource name: {response.resource_name}")
+
+if __name__ == "__main__":
+    # User-defined variables
+    MODEL_ID = "your-model-id"  # Replace with your model ID
+    PROJECT_ID = "your-project-id"  # Replace with your project ID
+    LOCATION = "us-central1"  # Replace with your preferred location
+    KMS_KEY_NAME = "ajkk"  # Replace with your KMS key name
+    CONTAINER_IMAGE_URI = "bsk"  # Replace with your container image URI
+    ARTIFACT_URI = "gs://skb"  # Replace with your GCS artifact URI
+
+    import_model_version(
+        model_id=MODEL_ID,
+        project=PROJECT_ID,
+        location=LOCATION,
+        kms_key_name=KMS_KEY_NAME,
+        container_image_uri=CONTAINER_IMAGE_URI,
+        artifact_uri=ARTIFACT_URI,
+    )
