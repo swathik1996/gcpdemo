@@ -25,3 +25,5 @@ roles/iam.serviceAccountUser
 roles/storage.admin (for Cloud Storage)
 roles/aiplatform.admin (for Vertex AI resources)
 roles/compute.admin (for Compute Engine)
+
+Managing machine learning models involves challenges like versioning, deployment, governance, collaboration, and scalability. Vertex AI Model Registry addresses these by providing a centralized repository to store, version, and track models with metadata. It ensures compliance through lineage tracking, enhances collaboration with controlled access, and integrates seamlessly with Vertex AI workflows to simplify model management and deployment.
