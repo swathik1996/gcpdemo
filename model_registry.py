@@ -30,12 +30,12 @@ if __name__ == "__main__":
 gsutil cp -r ./tpu_dummy_model gs://your-bucket-name/path-to-tpu-dummy-model/
 
 
-from google.cloud import aiplatform
+from google.cloud import aiplatform_v1
 
 def import_model_version(
-    model_id: str,
     project: str,
     location: str,
+    model_display_name: str,
     kms_key_name: str,
     container_image_uri: str,
     artifact_uri: str,
@@ -44,57 +44,53 @@ def import_model_version(
     Imports a new version of a model to Vertex AI Model Registry.
 
     Args:
-        model_id: The ID of the existing model.
         project: Google Cloud project ID.
         location: Location where the model is stored (e.g., "us-central1").
+        model_display_name: The display name of the existing model.
         kms_key_name: The KMS key to encrypt the model.
         container_image_uri: The container image URI for serving the model.
         artifact_uri: The GCS path to the model artifacts.
     """
-    # Initialize Vertex AI SDK
-    aiplatform.init(project=project, location=location)
+    client = aiplatform_v1.ModelServiceClient()
 
-    # Construct the parent resource name
-    parent = f"projects/{project}/locations/{location}/models/{model_id}"
+    # Define the parent resource path for the model
+    parent = f"projects/{project}/locations/{location}"
 
-    # Import the new version using ModelServiceClient
-    from google.cloud.aiplatform_v1 import ModelServiceClient
-    from google.cloud.aiplatform_v1.types import ImportModelRequest
-
-    client = ModelServiceClient()
-
-    request = ImportModelRequest(
-        parent=parent,
-        model={
-            "artifact_uri": artifact_uri,
-            "encryption_spec": {"kms_key_name": kms_key_name},
-            "container_spec": {
-                "image_uri": container_image_uri,
-            },
+    # Configure the model version to upload
+    model = {
+        "display_name": model_display_name,
+        "artifact_uri": artifact_uri,
+        "encryption_spec": {"kms_key_name": kms_key_name},
+        "container_spec": {
+            "image_uri": container_image_uri,
         },
-    )
+    }
 
-    response = client.import_model(request=request)
+    # Upload the new version
+    operation = client.upload_model(parent=parent, model=model)
 
-    print("New version imported successfully.")
-    print(f"Model version resource name: {response.name}")
+    print("Uploading model version... This may take a while.")
+    response = operation.result()
+    print("Model version imported successfully.")
+    print(f"Model resource name: {response.model}")
 
 
 if __name__ == "__main__":
     # User-defined variables
-    MODEL_ID = "your-model-id"  # Replace with your model ID
     PROJECT_ID = "your-project-id"  # Replace with your project ID
     LOCATION = "us-central1"  # Replace with your preferred location
+    MODEL_DISPLAY_NAME = "your-model-display-name"  # Replace with your model display name
     KMS_KEY_NAME = "ajkk"  # Replace with your KMS key name
     CONTAINER_IMAGE_URI = "bsk"  # Replace with your container image URI
     ARTIFACT_URI = "gs://skb"  # Replace with your GCS artifact URI
 
     import_model_version(
-        model_id=MODEL_ID,
         project=PROJECT_ID,
         location=LOCATION,
+        model_display_name=MODEL_DISPLAY_NAME,
         kms_key_name=KMS_KEY_NAME,
         container_image_uri=CONTAINER_IMAGE_URI,
         artifact_uri=ARTIFACT_URI,
     )
+
 
