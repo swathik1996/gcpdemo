@@ -127,6 +127,45 @@ def delete_metadata_store():
     print(response)
 
 
+
+
+
+from google.cloud import aiplatform
+ 
+# Define the source and destination locations
+project = "your-project-id"
+source_region = "europe-west2"
+destination_region = "europe-west1"  # Belgium region
+model_id = "your-model-id"
+model_version = "2"  # The version of the model you want to copy
+ 
+# Initialize the source and destination client
+source_client = aiplatform.gapic.ModelServiceClient(
+client_options={"api_endpoint": f"{source_region}-aiplatform.googleapis.com"}
+)
+destination_client = aiplatform.gapic.ModelServiceClient(
+client_options={"api_endpoint": f"{destination_region}-aiplatform.googleapis.com"}
+)
+ 
+# Define the source model version resource name
+source_model_version_name = f"projects/{project}/locations/{source_region}/models/{model_id}@{model_version}"
+ 
+# Get the source model version
+model = source_client.get_model(name=source_model_version_name)
+ 
+# Copy the model version to the destination region
+destination_model_name = f"projects/{project}/locations/{destination_region}/models/{model_id}"
+ 
+operation = destination_client.copy_model(
+    parent=destination_model_name,
+source_model=model.name,
+)
+ 
+print("Copy operation in progress...")
+result = operation.result()  # Waits for the operation to complete
+print("Model version copied successfully!")
+print(f"New model version: {result.name}")
+
 delete_metadata_store()
  
 start_task >> pull_message_task >> pull_file_task >> process_file_task >> load_to_spanner_task
