@@ -288,54 +288,54 @@ resource "google_dialogflow_cx_intent" "flight_booking_intent" {
     }
   }
 
-  // Parameter definitions using system entity types.
+  // Parameter definitions using the full system entity type format.
   parameter {
     id          = "destination"
-    entity_type = "sys.geo-city"
+    entity_type = "projects/-/locations/-/agents/-/entityTypes/sys.geo-city"
   }
 
   parameter {
     id          = "travel_date"
-    entity_type = "sys.date"
+    entity_type = "projects/-/locations/-/agents/-/entityTypes/sys.date"
   }
 
   parameter {
     id          = "origin"
-    entity_type = "sys.geo-city"
+    entity_type = "projects/-/locations/-/agents/-/entityTypes/sys.geo-city"
   }
 
   parameter {
     id          = "ticket_count"
-    entity_type = "sys.number"
+    entity_type = "projects/-/locations/-/agents/-/entityTypes/sys.number"
   }
 
   parameter {
     id          = "travel_class"
-    entity_type = "sys.any"
+    entity_type = "projects/-/locations/-/agents/-/entityTypes/sys.any"
   }
 
   parameter {
     id          = "travel_day"
-    entity_type = "sys.day-of-week"
+    entity_type = "projects/-/locations/-/agents/-/entityTypes/sys.day-of-week"
   }
 
   parameter {
     id          = "travel_date_range"
-    entity_type = "sys.date-period"
+    entity_type = "projects/-/locations/-/agents/-/entityTypes/sys.date-period"
   }
 
   parameter {
     id          = "flight_type"
-    entity_type = "sys.any"
+    entity_type = "projects/-/locations/-/agents/-/entityTypes/sys.any"
   }
 
   parameter {
     id          = "start_date"
-    entity_type = "sys.date"
+    entity_type = "projects/-/locations/-/agents/-/entityTypes/sys.date"
   }
 
   parameter {
     id          = "end_date"
-    entity_type = "sys.date"
+    entity_type = "projects/-/locations/-/agents/-/entityTypes/sys.date"
   }
 }
