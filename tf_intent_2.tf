@@ -3,7 +3,7 @@ resource "google_dialogflow_cx_intent" "flight_booking_intent" {
   location     = "us-central1"          # Adjust as needed
   project      = "<YOUR_PROJECT_ID>"    # Replace with your project ID
 
-  // Training phrases with annotated parts:
+  // 1. Book a flight
   training_phrases {
     repeat_count = 1
     parts {
@@ -11,6 +11,7 @@ resource "google_dialogflow_cx_intent" "flight_booking_intent" {
     }
   }
 
+  // 2. Can you book my flight to San Francisco next month
   training_phrases {
     repeat_count = 1
     parts {
@@ -26,6 +27,7 @@ resource "google_dialogflow_cx_intent" "flight_booking_intent" {
     }
   }
 
+  // 3. I want to use my reward points to book a flight from Milan in October
   training_phrases {
     repeat_count = 1
     parts {
@@ -44,6 +46,7 @@ resource "google_dialogflow_cx_intent" "flight_booking_intent" {
     }
   }
 
+  // 4. My family is visiting next week and we need to book 6 round trip tickets
   training_phrases {
     repeat_count = 1
     parts {
@@ -58,6 +61,7 @@ resource "google_dialogflow_cx_intent" "flight_booking_intent" {
     }
   }
 
+  // 5. Four business class tickets from Taiwan to Dubai for June 2nd to 30th
   training_phrases {
     repeat_count = 1
     parts {
@@ -90,6 +94,7 @@ resource "google_dialogflow_cx_intent" "flight_booking_intent" {
     }
   }
 
+  // 6. I need a flight Saturday from LAX to San Jose
   training_phrases {
     repeat_count = 1
     parts {
@@ -115,6 +120,7 @@ resource "google_dialogflow_cx_intent" "flight_booking_intent" {
     }
   }
 
+  // 7. Book SFO to MIA on August 10th one way
   training_phrases {
     repeat_count = 1
     parts {
@@ -144,6 +150,7 @@ resource "google_dialogflow_cx_intent" "flight_booking_intent" {
     }
   }
 
+  // 8. Help me book a ticket from 4/10 to 4/15 from Mexico City to Medellin Colombia please
   training_phrases {
     repeat_count = 1
     parts {
@@ -179,6 +186,7 @@ resource "google_dialogflow_cx_intent" "flight_booking_intent" {
     }
   }
 
+  // 9. I am booking a surprise trip for my mom, can you help arrange that for May 10th to May 25th to Costa Rica
   training_phrases {
     repeat_count = 1
     parts {
@@ -197,6 +205,7 @@ resource "google_dialogflow_cx_intent" "flight_booking_intent" {
     }
   }
 
+  // 10. Do you have any cheap flights to NYC for this weekend
   training_phrases {
     repeat_count = 1
     parts {
@@ -215,6 +224,7 @@ resource "google_dialogflow_cx_intent" "flight_booking_intent" {
     }
   }
 
+  // 11. I want to fly in my cousin from Montreal on August 8th
   training_phrases {
     repeat_count = 1
     parts {
@@ -233,6 +243,7 @@ resource "google_dialogflow_cx_intent" "flight_booking_intent" {
     }
   }
 
+  // 12. I want to find two seats to Panama City on July 4th
   training_phrases {
     repeat_count = 1
     parts {
@@ -258,6 +269,7 @@ resource "google_dialogflow_cx_intent" "flight_booking_intent" {
     }
   }
 
+  // 13. For my wedding anniversary we want to go to Seattle for Christmas
   training_phrases {
     repeat_count = 1
     parts {
@@ -276,54 +288,54 @@ resource "google_dialogflow_cx_intent" "flight_booking_intent" {
     }
   }
 
-  // Parameter definitions required by the training phrases:
+  // Parameter definitions using system entity types.
   parameter {
     id          = "destination"
-    entity_type = "projects/<YOUR_PROJECT_ID>/locations/us-central1/agents/<YOUR_AGENT_ID>/entityTypes/@sys.geo-city"
+    entity_type = "sys.geo-city"
   }
 
   parameter {
     id          = "travel_date"
-    entity_type = "projects/<YOUR_PROJECT_ID>/locations/us-central1/agents/<YOUR_AGENT_ID>/entityTypes/@sys.date"
+    entity_type = "sys.date"
   }
 
   parameter {
     id          = "origin"
-    entity_type = "projects/<YOUR_PROJECT_ID>/locations/us-central1/agents/<YOUR_AGENT_ID>/entityTypes/@sys.geo-city"
+    entity_type = "sys.geo-city"
   }
 
   parameter {
     id          = "ticket_count"
-    entity_type = "projects/<YOUR_PROJECT_ID>/locations/us-central1/agents/<YOUR_AGENT_ID>/entityTypes/@sys.number"
+    entity_type = "sys.number"
   }
 
   parameter {
     id          = "travel_class"
-    entity_type = "projects/<YOUR_PROJECT_ID>/locations/us-central1/agents/<YOUR_AGENT_ID>/entityTypes/@sys.any"
+    entity_type = "sys.any"
   }
 
   parameter {
     id          = "travel_day"
-    entity_type = "projects/<YOUR_PROJECT_ID>/locations/us-central1/agents/<YOUR_AGENT_ID>/entityTypes/@sys.day-of-week"
+    entity_type = "sys.day-of-week"
   }
 
   parameter {
     id          = "travel_date_range"
-    entity_type = "projects/<YOUR_PROJECT_ID>/locations/us-central1/agents/<YOUR_AGENT_ID>/entityTypes/@sys.date-period"
+    entity_type = "sys.date-period"
   }
 
   parameter {
     id          = "flight_type"
-    entity_type = "projects/<YOUR_PROJECT_ID>/locations/us-central1/agents/<YOUR_AGENT_ID>/entityTypes/@sys.any"
+    entity_type = "sys.any"
   }
 
   parameter {
     id          = "start_date"
-    entity_type = "projects/<YOUR_PROJECT_ID>/locations/us-central1/agents/<YOUR_AGENT_ID>/entityTypes/@sys.date"
+    entity_type = "sys.date"
   }
 
   parameter {
     id          = "end_date"
-    entity_type = "projects/<YOUR_PROJECT_ID>/locations/us-central1/agents/<YOUR_AGENT_ID>/entityTypes/@sys.date"
+    entity_type = "sys.date"
   }
 }
