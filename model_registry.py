@@ -134,4 +134,14 @@ update_mask_paths = ["display_name", "labels"]  # Specify the fields to update
 
 update_model_mask(project_id, location, model_id, update_mask_paths)
 
+curl -X PATCH \
+  -H "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
+  -H "Content-Type: application/json; charset=utf-8" \
+  -d '{
+        "displayName": "Updated Display Name",
+        "labels": {
+          "new_label": "new_value"
+        }
+      }' \
+  "https://your-location-aiplatform.googleapis.com/v1/projects/your-project-id/locations/your-location/models/your-model-id?updateMask=displayName,labels"
 
