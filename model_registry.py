@@ -94,3 +94,42 @@ if __name__ == "__main__":
     )
 
 
+
+from google.cloud import aiplatform_v1
+from google.protobuf import field_mask_pb2
+
+def update_model_mask(project_id: str, location: str, model_id: str, update_mask_paths: list):
+    # Initialize the ModelServiceClient
+    client = aiplatform_v1.ModelServiceClient(client_options={
+        "api_endpoint": f"{location}-aiplatform.googleapis.com"
+    })
+
+    # Construct the fully qualified model name
+    model_name = client.model_path(project=project_id, location=location, model=model_id)
+
+    # Create a FieldMask object with the paths to update
+    field_mask = field_mask_pb2.FieldMask(paths=update_mask_paths)
+
+    # Create a Model object with the fields to update
+    # For example, updating the display name and labels
+    model = aiplatform_v1.Model(
+        name=model_name,
+        display_name="New Display Name",  # Example field to update
+        labels={"new_label": "new_value"}  # Example field to update
+    )
+
+    # Update the model with the specified mask
+    updated_model = client.update_model(model=model, update_mask=field_mask)
+
+    print("Model updated successfully:")
+    print(updated_model)
+
+# Example usage
+project_id = "your-project-id"
+location = "us-central1"
+model_id = "your-model-id"
+update_mask_paths = ["display_name", "labels"]  # Specify the fields to update
+
+update_model_mask(project_id, location, model_id, update_mask_paths)
+
+
