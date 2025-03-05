@@ -111,18 +111,20 @@ def update_model_mask(project_id: str, location: str, model_id: str, update_mask
     field_mask = field_mask_pb2.FieldMask(paths=update_mask_paths)
 
     # Create a Model object with the fields to update
-    # For example, updating the display name and labels
+    # Only include fields that are allowed to be updated
     model = aiplatform_v1.Model(
         name=model_name,
         display_name="New Display Name",  # Example field to update
         labels={"new_label": "new_value"}  # Example field to update
     )
 
-    # Update the model with the specified mask
-    updated_model = client.update_model(model=model, update_mask=field_mask)
-
-    print("Model updated successfully:")
-    print(updated_model)
+    try:
+        # Update the model with the specified mask
+        updated_model = client.update_model(model=model, update_mask=field_mask)
+        print("Model updated successfully:")
+        print(updated_model)
+    except Exception as e:
+        print(f"Failed to update model: {e}")
 
 # Example usage
 project_id = "your-project-id"
