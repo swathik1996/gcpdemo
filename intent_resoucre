@@ -288,3 +288,52 @@ resource "google_dialogflow_cx_intent" "flight_booking_intent" {
     }
   }
 }
+
+
+"I’d like to visit the Lloyds branch on Oxford Street"
+
+"Book me an appointment at your Canary Wharf branch"
+
+"Is the Baker Street branch available?"
+
+"I prefer the Lloyds in Stratford"
+
+"Let’s go with the Holborn branch"
+
+"I’d like to meet someone at the Lloyds near Liverpool Street"
+
+"Any Lloyds branch in central London is fine"
+
+🗓️ Intent: ChooseDateTime (London context)
+💬 Training Phrases:
+"Can I come in on Friday afternoon?"
+
+"Tomorrow at 11 AM works"
+
+"Next Tuesday, around 3 PM"
+
+"Book it for 10 AM this Thursday"
+
+"Is Saturday morning available?"
+
+"I’m free on the 30th of April at noon"
+
+"What about early next week?"
+
+✅ Intent: ConfirmAppointment (Lloyds tone)
+💬 Training Phrases:
+"Yes, that sounds good"
+
+"Please go ahead and confirm"
+
+"That time works, book it in"
+
+"Yes, I’m happy with that"
+
+"Confirm the appointment at Oxford Street, please"
+
+"Let’s proceed with that booking"
+
+"Confirmed – see you then"
+
+
