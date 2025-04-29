@@ -45,32 +45,19 @@ resource "google_dialogflow_cx_entity_type" "basic_entity_type" {
 
 
 locals {
-  # Construct full path to the entityTypes folder
-  entity_types_path = "${var.user_folder}/entityTypes"
+  entity_json_files = fileset("${var.user_folder}/entityTypes", "**/*.json")
 
-  # List all folders (entities) inside entityTypes
-  entity_folders = fileset(local.entity_types_path, "*")
+  entity_folders = [
+    dirname(dirname(file))  # extracts 'branch' from 'entityTypes/branch/branch.json'
+    for file in local.entity_json_files
+    if file =~ ".*\\/entities\\/en\\.json"
+  ]
 
-  # Load metadata and entity values from each entity folder
+  unique_folders = toset(local.entity_folders)
+
   entities_data = [
-    for folder in local.entity_folders : {
-      entity_info   = jsondecode(file("${local.entity_types_path}/${folder}/${folder}.json"))
-      entity_values = jsondecode(file("${local.entity_types_path}/${folder}/entities/en.json"))
+    for folder in local.unique_folders : {
+      entity_info   = jsondecode(file("${var.user_folder}/entityTypes/${folder}/${folder}.json"))
+      entity_values = jsondecode(file("${var.user_folder}/entityTypes/${folder}/entities/en.json"))
     }
   ]
-
-  # Prepare final structure
-  entity_list = [
-    for e in local.entities_data : {
-      display_name            = e.entity_info.displayName
-      kind                    = e.entity_info.kind
-      enable_fuzzy_extraction = try(e.entity_info.enable_fuzzy_extraction, false)
-      entities = [
-        for ent in e.entity_values.entities : {
-          value    = ent.value
-          synonyms = ent.synonyms
-        }
-      ]
-    }
-  ]
-}
