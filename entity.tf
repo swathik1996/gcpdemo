@@ -41,3 +41,36 @@ resource "google_dialogflow_cx_entity_type" "basic_entity_type" {
 
   enable_fuzzy_extraction = local.entity_list[count.index].enable_fuzzy_extraction
 }
+
+
+
+locals {
+  # Construct full path to the entityTypes folder
+  entity_types_path = "${var.user_folder}/entityTypes"
+
+  # List all folders (entities) inside entityTypes
+  entity_folders = fileset(local.entity_types_path, "*")
+
+  # Load metadata and entity values from each entity folder
+  entities_data = [
+    for folder in local.entity_folders : {
+      entity_info   = jsondecode(file("${local.entity_types_path}/${folder}/${folder}.json"))
+      entity_values = jsondecode(file("${local.entity_types_path}/${folder}/entities/en.json"))
+    }
+  ]
+
+  # Prepare final structure
+  entity_list = [
+    for e in local.entities_data : {
+      display_name            = e.entity_info.displayName
+      kind                    = e.entity_info.kind
+      enable_fuzzy_extraction = try(e.entity_info.enable_fuzzy_extraction, false)
+      entities = [
+        for ent in e.entity_values.entities : {
+          value    = ent.value
+          synonyms = ent.synonyms
+        }
+      ]
+    }
+  ]
+}
