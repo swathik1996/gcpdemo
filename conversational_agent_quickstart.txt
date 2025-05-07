@@ -1,3 +1,5 @@
 https://storage.googleapis.com/cloud-training/T-CECCAI-I/T-CCAICDCX-I/lab-solns/Cloudio-cx-route-groups.blob
 
 https://storage.googleapis.com/cloud-training/specialized-training/ccai/agents/Telco_Solutions_FAQs.pdf
+
+For questions about Telco Solutions services, use ${TOOL: faq_ds}
