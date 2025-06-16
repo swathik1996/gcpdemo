@@ -1,0 +1,71 @@
+Pros:
+
+Enables source control and version history for agents.
+
+Supports code reviews and agent diffs.
+
+Enables collaboration via pull requests and merges.
+
+Helps track changes at file-level granularity.
+
+Leverages familiar developer workflows.
+
+Cons:
+
+Manual sync required — no automatic Git push/pull.
+
+No REST API or SDK support for push/restore.
+
+File count limit — older integrations may fail if agent export contains more than 500 files.
+
+Requires GitHub access token which needs to be stored securely (usually in Secret Manager).
+
+External dependency: access token management often handled by a separate DevOps or platform team.
+
+Private/self-hosted GitHub repositories not supported.
+
+Repository must contain only agent-exported files — any non-agent files are automatically deleted on push.
+
+Error-prone for large or complex agents due to file count limitations.
+
+2️⃣ Upload Local File (Not Recommended)
+Pros:
+
+Simple for quick, one-off restores.
+
+No additional setup required.
+
+Convenient for small test agents.
+
+Cons:
+
+Requires elevated permissions for file upload.
+
+Not scalable for large agents or frequent updates.
+
+Fully manual — not CI/CD friendly.
+
+No version control or audit trail.
+
+3️⃣ Cloud Storage (Recommended)
+Pros:
+
+Fully automated and scalable.
+
+Handles large agent exports without file count limitations.
+
+Supports CI/CD pipelines and automated workflows.
+
+Compatible with infrastructure-as-code (Terraform, Deployment Manager, custom automation).
+
+No external team dependency — full ownership of service account, GCS permissions, and access stays within AI/Engineering team.
+
+Secure, enterprise-grade solution suitable for LBG environments.
+
+Cons:
+
+Requires initial setup of GCS buckets and secure permissions.
+
+Slight upfront effort to integrate into CI/CD pipelines.
+
+GCS access management must be handled carefully to ensure secure operations.
