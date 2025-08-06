@@ -1,6 +1,10 @@
+import os
 import json
 import logging
-from flask import Request, jsonify
+from flask import Flask, request, jsonify
+
+# Initialize Flask app
+app = Flask(__name__)
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -124,8 +128,9 @@ handlers = {
     "cheapestPlan": cheapest_plan
 }
 
-def dialogflow_cx_webhook(request: Request):
-    """Entry point for Google Cloud Function"""
+@app.route('/', methods=['POST'])
+def handle_webhook_request():
+    """Handle webhook requests from Dialogflow CX."""
     try:
         request_json = request.get_json()
         logging.info(f"Request: {json.dumps(request_json, indent=2)}")
@@ -143,3 +148,6 @@ def dialogflow_cx_webhook(request: Request):
     except Exception as e:
         logging.error(f"ERROR: {str(e)}")
         return jsonify({"error": str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
