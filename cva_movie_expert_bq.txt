@@ -1,0 +1,29 @@
+-- Create dataset in US multi-region (matches Los Angeles timezone)
+CREATE SCHEMA IF NOT EXISTS `your-project-id.Movies`
+OPTIONS(
+  location='US',
+  description='Movie database for Dialogflow Movie Expert agent'
+);
+
+-- Create movies_data table
+CREATE OR REPLACE TABLE `your-project-id.Movies.movies_data` (
+  id INT64,
+  adult BOOL,
+  budget INT64,
+  genres STRING,
+  original_language STRING,
+  title STRING,
+  popularity FLOAT64,
+  production_companies STRING,
+  production_countries STRING,
+  release_date DATE,
+  revenue FLOAT64,
+  runtime FLOAT64
+);
+
+-- Create credits table
+CREATE OR REPLACE TABLE `your-project-id.Movies.credits` (
+  id INT64,
+  cast_members STRING,
+  crew STRING
+);
